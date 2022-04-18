@@ -30,8 +30,8 @@ import whereismycomic.repository.CharactersRepository;
 @WithMockUser
 class CharactersResourceIT {
 
-    private static final String DEFAULT_FULL_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_FULL_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_FULLNAME = "AAAAAAAAAA";
+    private static final String UPDATED_FULLNAME = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -66,7 +66,7 @@ class CharactersResourceIT {
      */
     public static Characters createEntity(EntityManager em) {
         Characters characters = new Characters()
-            .fullName(DEFAULT_FULL_NAME)
+            .fullname(DEFAULT_FULLNAME)
             .description(DEFAULT_DESCRIPTION)
             .thumbnail(DEFAULT_THUMBNAIL)
             .thumbnailContentType(DEFAULT_THUMBNAIL_CONTENT_TYPE);
@@ -81,7 +81,7 @@ class CharactersResourceIT {
      */
     public static Characters createUpdatedEntity(EntityManager em) {
         Characters characters = new Characters()
-            .fullName(UPDATED_FULL_NAME)
+            .fullname(UPDATED_FULLNAME)
             .description(UPDATED_DESCRIPTION)
             .thumbnail(UPDATED_THUMBNAIL)
             .thumbnailContentType(UPDATED_THUMBNAIL_CONTENT_TYPE);
@@ -106,7 +106,7 @@ class CharactersResourceIT {
         List<Characters> charactersList = charactersRepository.findAll();
         assertThat(charactersList).hasSize(databaseSizeBeforeCreate + 1);
         Characters testCharacters = charactersList.get(charactersList.size() - 1);
-        assertThat(testCharacters.getFullName()).isEqualTo(DEFAULT_FULL_NAME);
+        assertThat(testCharacters.getFullname()).isEqualTo(DEFAULT_FULLNAME);
         assertThat(testCharacters.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCharacters.getThumbnail()).isEqualTo(DEFAULT_THUMBNAIL);
         assertThat(testCharacters.getThumbnailContentType()).isEqualTo(DEFAULT_THUMBNAIL_CONTENT_TYPE);
@@ -142,7 +142,7 @@ class CharactersResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(characters.getId().intValue())))
-            .andExpect(jsonPath("$.[*].fullName").value(hasItem(DEFAULT_FULL_NAME)))
+            .andExpect(jsonPath("$.[*].fullname").value(hasItem(DEFAULT_FULLNAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].thumbnailContentType").value(hasItem(DEFAULT_THUMBNAIL_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].thumbnail").value(hasItem(Base64Utils.encodeToString(DEFAULT_THUMBNAIL))));
@@ -160,7 +160,7 @@ class CharactersResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(characters.getId().intValue()))
-            .andExpect(jsonPath("$.fullName").value(DEFAULT_FULL_NAME))
+            .andExpect(jsonPath("$.fullname").value(DEFAULT_FULLNAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.thumbnailContentType").value(DEFAULT_THUMBNAIL_CONTENT_TYPE))
             .andExpect(jsonPath("$.thumbnail").value(Base64Utils.encodeToString(DEFAULT_THUMBNAIL)));
@@ -186,7 +186,7 @@ class CharactersResourceIT {
         // Disconnect from session so that the updates on updatedCharacters are not directly saved in db
         em.detach(updatedCharacters);
         updatedCharacters
-            .fullName(UPDATED_FULL_NAME)
+            .fullname(UPDATED_FULLNAME)
             .description(UPDATED_DESCRIPTION)
             .thumbnail(UPDATED_THUMBNAIL)
             .thumbnailContentType(UPDATED_THUMBNAIL_CONTENT_TYPE);
@@ -203,7 +203,7 @@ class CharactersResourceIT {
         List<Characters> charactersList = charactersRepository.findAll();
         assertThat(charactersList).hasSize(databaseSizeBeforeUpdate);
         Characters testCharacters = charactersList.get(charactersList.size() - 1);
-        assertThat(testCharacters.getFullName()).isEqualTo(UPDATED_FULL_NAME);
+        assertThat(testCharacters.getFullname()).isEqualTo(UPDATED_FULLNAME);
         assertThat(testCharacters.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCharacters.getThumbnail()).isEqualTo(UPDATED_THUMBNAIL);
         assertThat(testCharacters.getThumbnailContentType()).isEqualTo(UPDATED_THUMBNAIL_CONTENT_TYPE);
@@ -289,7 +289,7 @@ class CharactersResourceIT {
         List<Characters> charactersList = charactersRepository.findAll();
         assertThat(charactersList).hasSize(databaseSizeBeforeUpdate);
         Characters testCharacters = charactersList.get(charactersList.size() - 1);
-        assertThat(testCharacters.getFullName()).isEqualTo(DEFAULT_FULL_NAME);
+        assertThat(testCharacters.getFullname()).isEqualTo(DEFAULT_FULLNAME);
         assertThat(testCharacters.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCharacters.getThumbnail()).isEqualTo(DEFAULT_THUMBNAIL);
         assertThat(testCharacters.getThumbnailContentType()).isEqualTo(DEFAULT_THUMBNAIL_CONTENT_TYPE);
@@ -308,7 +308,7 @@ class CharactersResourceIT {
         partialUpdatedCharacters.setId(characters.getId());
 
         partialUpdatedCharacters
-            .fullName(UPDATED_FULL_NAME)
+            .fullname(UPDATED_FULLNAME)
             .description(UPDATED_DESCRIPTION)
             .thumbnail(UPDATED_THUMBNAIL)
             .thumbnailContentType(UPDATED_THUMBNAIL_CONTENT_TYPE);
@@ -325,7 +325,7 @@ class CharactersResourceIT {
         List<Characters> charactersList = charactersRepository.findAll();
         assertThat(charactersList).hasSize(databaseSizeBeforeUpdate);
         Characters testCharacters = charactersList.get(charactersList.size() - 1);
-        assertThat(testCharacters.getFullName()).isEqualTo(UPDATED_FULL_NAME);
+        assertThat(testCharacters.getFullname()).isEqualTo(UPDATED_FULLNAME);
         assertThat(testCharacters.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCharacters.getThumbnail()).isEqualTo(UPDATED_THUMBNAIL);
         assertThat(testCharacters.getThumbnailContentType()).isEqualTo(UPDATED_THUMBNAIL_CONTENT_TYPE);

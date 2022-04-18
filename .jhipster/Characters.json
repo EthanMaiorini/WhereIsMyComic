@@ -6,7 +6,7 @@
   "entityTableName": "characters",
   "fields": [
     {
-      "fieldName": "fullName",
+      "fieldName": "fullname",
       "fieldType": "String"
     },
     {
@@ -30,13 +30,6 @@
       "otherEntityName": "series",
       "otherEntityRelationshipName": "characters",
       "relationshipName": "series",
-      "relationshipType": "one-to-many"
-    },
-    {
-      "otherEntityField": "characterId",
-      "otherEntityName": "comic",
-      "otherEntityRelationshipName": "characters",
-      "relationshipName": "comic",
       "relationshipType": "one-to-many"
     }
   ],

@@ -6,7 +6,7 @@
   "entityTableName": "comic",
   "fields": [
     {
-      "fieldName": "issueNumber",
+      "fieldName": "issuenumber",
       "fieldType": "Integer"
     },
     {
@@ -37,12 +37,6 @@
       "otherEntityName": "series",
       "otherEntityRelationshipName": "comic",
       "relationshipName": "series",
-      "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityName": "characters",
-      "otherEntityRelationshipName": "comic",
-      "relationshipName": "characters",
       "relationshipType": "many-to-one"
     }
   ],

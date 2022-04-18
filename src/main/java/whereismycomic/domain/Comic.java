@@ -22,8 +22,8 @@ public class Comic implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "issue_number")
-    private Integer issueNumber;
+    @Column(name = "issuenumber")
+    private Integer issuenumber;
 
     @Column(name = "location")
     private String location;
@@ -45,10 +45,6 @@ public class Comic implements Serializable {
     @JsonIgnoreProperties(value = { "comics", "characters" }, allowSetters = true)
     private Series series;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "series", "comics" }, allowSetters = true)
-    private Characters characters;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -64,17 +60,17 @@ public class Comic implements Serializable {
         this.id = id;
     }
 
-    public Integer getIssueNumber() {
-        return this.issueNumber;
+    public Integer getIssuenumber() {
+        return this.issuenumber;
     }
 
-    public Comic issueNumber(Integer issueNumber) {
-        this.setIssueNumber(issueNumber);
+    public Comic issuenumber(Integer issuenumber) {
+        this.setIssuenumber(issuenumber);
         return this;
     }
 
-    public void setIssueNumber(Integer issueNumber) {
-        this.issueNumber = issueNumber;
+    public void setIssuenumber(Integer issuenumber) {
+        this.issuenumber = issuenumber;
     }
 
     public String getLocation() {
@@ -155,19 +151,6 @@ public class Comic implements Serializable {
         return this;
     }
 
-    public Characters getCharacters() {
-        return this.characters;
-    }
-
-    public void setCharacters(Characters characters) {
-        this.characters = characters;
-    }
-
-    public Comic characters(Characters characters) {
-        this.setCharacters(characters);
-        return this;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -192,7 +175,7 @@ public class Comic implements Serializable {
     public String toString() {
         return "Comic{" +
             "id=" + getId() +
-            ", issueNumber=" + getIssueNumber() +
+            ", issuenumber=" + getIssuenumber() +
             ", location='" + getLocation() + "'" +
             ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +

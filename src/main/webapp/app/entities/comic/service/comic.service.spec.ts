@@ -21,7 +21,7 @@ describe('Comic Service', () => {
 
     elemDefault = {
       id: 0,
-      issueNumber: 0,
+      issuenumber: 0,
       location: 'AAAAAAA',
       title: 'AAAAAAA',
       description: 'AAAAAAA',
@@ -62,7 +62,7 @@ describe('Comic Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          issueNumber: 1,
+          issuenumber: 1,
           location: 'BBBBBB',
           title: 'BBBBBB',
           description: 'BBBBBB',
@@ -104,7 +104,7 @@ describe('Comic Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          issueNumber: 1,
+          issuenumber: 1,
           location: 'BBBBBB',
           title: 'BBBBBB',
           description: 'BBBBBB',

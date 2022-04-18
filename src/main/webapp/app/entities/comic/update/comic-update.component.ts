@@ -12,8 +12,6 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { ISeries } from 'app/entities/series/series.model';
 import { SeriesService } from 'app/entities/series/service/series.service';
-import { ICharacters } from 'app/entities/characters/characters.model';
-import { CharactersService } from 'app/entities/characters/service/characters.service';
 
 @Component({
   selector: 'jhi-comic-update',
@@ -23,18 +21,16 @@ export class ComicUpdateComponent implements OnInit {
   isSaving = false;
 
   seriesSharedCollection: ISeries[] = [];
-  charactersSharedCollection: ICharacters[] = [];
 
   editForm = this.fb.group({
     id: [],
-    issueNumber: [],
+    issuenumber: [],
     location: [],
     title: [],
     description: [],
     thumbnail: [],
     thumbnailContentType: [],
     series: [],
-    characters: [],
   });
 
   constructor(
@@ -42,7 +38,6 @@ export class ComicUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected comicService: ComicService,
     protected seriesService: SeriesService,
-    protected charactersService: CharactersService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -99,10 +94,6 @@ export class ComicUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  trackCharactersById(_index: number, item: ICharacters): number {
-    return item.id!;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IComic>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
       next: () => this.onSaveSuccess(),
@@ -125,21 +116,16 @@ export class ComicUpdateComponent implements OnInit {
   protected updateForm(comic: IComic): void {
     this.editForm.patchValue({
       id: comic.id,
-      issueNumber: comic.issueNumber,
+      issuenumber: comic.issuenumber,
       location: comic.location,
       title: comic.title,
       description: comic.description,
       thumbnail: comic.thumbnail,
       thumbnailContentType: comic.thumbnailContentType,
       series: comic.series,
-      characters: comic.characters,
     });
 
     this.seriesSharedCollection = this.seriesService.addSeriesToCollectionIfMissing(this.seriesSharedCollection, comic.series);
-    this.charactersSharedCollection = this.charactersService.addCharactersToCollectionIfMissing(
-      this.charactersSharedCollection,
-      comic.characters
-    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -148,30 +134,19 @@ export class ComicUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISeries[]>) => res.body ?? []))
       .pipe(map((series: ISeries[]) => this.seriesService.addSeriesToCollectionIfMissing(series, this.editForm.get('series')!.value)))
       .subscribe((series: ISeries[]) => (this.seriesSharedCollection = series));
-
-    this.charactersService
-      .query()
-      .pipe(map((res: HttpResponse<ICharacters[]>) => res.body ?? []))
-      .pipe(
-        map((characters: ICharacters[]) =>
-          this.charactersService.addCharactersToCollectionIfMissing(characters, this.editForm.get('characters')!.value)
-        )
-      )
-      .subscribe((characters: ICharacters[]) => (this.charactersSharedCollection = characters));
   }
 
   protected createFromForm(): IComic {
     return {
       ...new Comic(),
       id: this.editForm.get(['id'])!.value,
-      issueNumber: this.editForm.get(['issueNumber'])!.value,
+      issuenumber: this.editForm.get(['issuenumber'])!.value,
       location: this.editForm.get(['location'])!.value,
       title: this.editForm.get(['title'])!.value,
       description: this.editForm.get(['description'])!.value,
       thumbnailContentType: this.editForm.get(['thumbnailContentType'])!.value,
       thumbnail: this.editForm.get(['thumbnail'])!.value,
       series: this.editForm.get(['series'])!.value,
-      characters: this.editForm.get(['characters'])!.value,
     };
   }
 }

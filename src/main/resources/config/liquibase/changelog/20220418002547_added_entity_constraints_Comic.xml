@@ -13,11 +13,5 @@
                                  constraintName="fk_comic__series_id"
                                  referencedColumnNames="id"
                                  referencedTableName="series"/>
-
-        <addForeignKeyConstraint baseColumnNames="characters_id"
-                                 baseTableName="comic"
-                                 constraintName="fk_comic__characters_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="characters"/>
     </changeSet>
 </databaseChangeLog>

@@ -21,7 +21,7 @@ describe('Characters Service', () => {
 
     elemDefault = {
       id: 0,
-      fullName: 'AAAAAAA',
+      fullname: 'AAAAAAA',
       description: 'AAAAAAA',
       thumbnailContentType: 'image/png',
       thumbnail: 'AAAAAAA',
@@ -60,7 +60,7 @@ describe('Characters Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          fullName: 'BBBBBB',
+          fullname: 'BBBBBB',
           description: 'BBBBBB',
           thumbnail: 'BBBBBB',
         },
@@ -79,7 +79,7 @@ describe('Characters Service', () => {
     it('should partial update a Characters', () => {
       const patchObject = Object.assign(
         {
-          fullName: 'BBBBBB',
+          fullname: 'BBBBBB',
           description: 'BBBBBB',
         },
         new Characters()
@@ -100,7 +100,7 @@ describe('Characters Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          fullName: 'BBBBBB',
+          fullname: 'BBBBBB',
           description: 'BBBBBB',
           thumbnail: 'BBBBBB',
         },

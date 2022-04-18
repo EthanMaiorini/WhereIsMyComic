@@ -14,7 +14,7 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="full_name" type="varchar(255)">
+            <column name="fullname" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="description" type="varchar(255)">
@@ -47,7 +47,7 @@
                   tableName="characters"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="full_name" type="string"/>
+            <column name="fullname" type="string"/>
             <column name="description" type="string"/>
             <column name="thumbnail" type="blob"/>
             <column name="thumbnail_content_type" type="string"/>

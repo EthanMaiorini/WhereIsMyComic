@@ -119,8 +119,8 @@ public class ComicResource {
         Optional<Comic> result = comicRepository
             .findById(comic.getId())
             .map(existingComic -> {
-                if (comic.getIssueNumber() != null) {
-                    existingComic.setIssueNumber(comic.getIssueNumber());
+                if (comic.getIssuenumber() != null) {
+                    existingComic.setIssuenumber(comic.getIssuenumber());
                 }
                 if (comic.getLocation() != null) {
                     existingComic.setLocation(comic.getLocation());

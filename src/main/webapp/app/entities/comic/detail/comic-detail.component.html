@@ -14,9 +14,9 @@
         <dd>
           <span>{{ comic.id }}</span>
         </dd>
-        <dt><span>Issue Number</span></dt>
+        <dt><span>Issuenumber</span></dt>
         <dd>
-          <span>{{ comic.issueNumber }}</span>
+          <span>{{ comic.issuenumber }}</span>
         </dd>
         <dt><span>Location</span></dt>
         <dd>
@@ -43,12 +43,6 @@
         <dd>
           <div *ngIf="comic.series">
             <a [routerLink]="['/series', comic.series?.id, 'view']">{{ comic.series?.id }}</a>
-          </div>
-        </dd>
-        <dt><span>Characters</span></dt>
-        <dd>
-          <div *ngIf="comic.characters">
-            <a [routerLink]="['/characters', comic.characters?.id, 'view']">{{ comic.characters?.id }}</a>
           </div>
         </dd>
       </dl>

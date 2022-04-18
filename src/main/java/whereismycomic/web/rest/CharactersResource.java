@@ -123,8 +123,8 @@ public class CharactersResource {
         Optional<Characters> result = charactersRepository
             .findById(characters.getId())
             .map(existingCharacters -> {
-                if (characters.getFullName() != null) {
-                    existingCharacters.setFullName(characters.getFullName());
+                if (characters.getFullname() != null) {
+                    existingCharacters.setFullname(characters.getFullname());
                 }
                 if (characters.getDescription() != null) {
                     existingCharacters.setDescription(characters.getDescription());

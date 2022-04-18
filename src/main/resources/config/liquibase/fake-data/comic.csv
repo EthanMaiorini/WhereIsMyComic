@@ -1,4 +1,4 @@
-id;issue_number;location;title;description;thumbnail;thumbnail_content_type
+id;issuenumber;location;title;description;thumbnail;thumbnail_content_type
 1;79829;cross-platform Buckinghamshire solid;withdrawal Tasty;Cotton index payment;../fake-data/blob/hipster.png;image/png
 2;75030;connect;Frozen Carolina;Rubber;../fake-data/blob/hipster.png;image/png
 3;83307;cross-media;Soap;human-resource Chief Checking;../fake-data/blob/hipster.png;image/png

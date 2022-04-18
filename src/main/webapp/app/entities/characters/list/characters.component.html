@@ -33,7 +33,7 @@
       <thead>
         <tr>
           <th scope="col"><span>ID</span></th>
-          <th scope="col"><span>Full Name</span></th>
+          <th scope="col"><span>Fullname</span></th>
           <th scope="col"><span>Description</span></th>
           <th scope="col"><span>Thumbnail</span></th>
           <th scope="col"></th>
@@ -44,7 +44,7 @@
           <td>
             <a [routerLink]="['/characters', characters.id, 'view']">{{ characters.id }}</a>
           </td>
-          <td>{{ characters.fullName }}</td>
+          <td>{{ characters.fullname }}</td>
           <td>{{ characters.description }}</td>
           <td>
             <a *ngIf="characters.thumbnail" (click)="openFile(characters.thumbnail, characters.thumbnailContentType)">

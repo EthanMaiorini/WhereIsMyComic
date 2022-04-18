@@ -33,13 +33,12 @@
       <thead>
         <tr>
           <th scope="col"><span>ID</span></th>
-          <th scope="col"><span>Issue Number</span></th>
+          <th scope="col"><span>Issuenumber</span></th>
           <th scope="col"><span>Location</span></th>
           <th scope="col"><span>Title</span></th>
           <th scope="col"><span>Description</span></th>
           <th scope="col"><span>Thumbnail</span></th>
           <th scope="col"><span>Series</span></th>
-          <th scope="col"><span>Characters</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -48,7 +47,7 @@
           <td>
             <a [routerLink]="['/comic', comic.id, 'view']">{{ comic.id }}</a>
           </td>
-          <td>{{ comic.issueNumber }}</td>
+          <td>{{ comic.issuenumber }}</td>
           <td>{{ comic.location }}</td>
           <td>{{ comic.title }}</td>
           <td>{{ comic.description }}</td>
@@ -61,11 +60,6 @@
           <td>
             <div *ngIf="comic.series">
               <a [routerLink]="['/series', comic.series?.id, 'view']">{{ comic.series?.id }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="comic.characters">
-              <a [routerLink]="['/characters', comic.characters?.id, 'view']">{{ comic.characters?.id }}</a>
             </div>
           </td>
           <td class="text-end">

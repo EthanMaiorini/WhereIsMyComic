@@ -12,14 +12,14 @@
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" for="field_issueNumber">Issue Number</label>
+          <label class="form-label" for="field_issuenumber">Issuenumber</label>
           <input
             type="number"
             class="form-control"
-            name="issueNumber"
-            id="field_issueNumber"
-            data-cy="issueNumber"
-            formControlName="issueNumber"
+            name="issuenumber"
+            id="field_issuenumber"
+            data-cy="issuenumber"
+            formControlName="issuenumber"
           />
         </div>
 
@@ -87,21 +87,6 @@
               *ngFor="let seriesOption of seriesSharedCollection; trackBy: trackSeriesById"
             >
               {{ seriesOption.id }}
-            </option>
-          </select>
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" for="field_characters">Characters</label>
-          <select class="form-control" id="field_characters" data-cy="characters" name="characters" formControlName="characters">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                charactersOption.id === editForm.get('characters')!.value?.id ? editForm.get('characters')!.value : charactersOption
-              "
-              *ngFor="let charactersOption of charactersSharedCollection; trackBy: trackCharactersById"
-            >
-              {{ charactersOption.id }}
             </option>
           </select>
         </div>

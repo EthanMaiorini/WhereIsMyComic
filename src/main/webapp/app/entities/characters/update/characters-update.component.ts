@@ -20,7 +20,7 @@ export class CharactersUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    fullName: [],
+    fullname: [],
     description: [],
     thumbnail: [],
     thumbnailContentType: [],
@@ -102,7 +102,7 @@ export class CharactersUpdateComponent implements OnInit {
   protected updateForm(characters: ICharacters): void {
     this.editForm.patchValue({
       id: characters.id,
-      fullName: characters.fullName,
+      fullname: characters.fullname,
       description: characters.description,
       thumbnail: characters.thumbnail,
       thumbnailContentType: characters.thumbnailContentType,
@@ -113,7 +113,7 @@ export class CharactersUpdateComponent implements OnInit {
     return {
       ...new Characters(),
       id: this.editForm.get(['id'])!.value,
-      fullName: this.editForm.get(['fullName'])!.value,
+      fullname: this.editForm.get(['fullname'])!.value,
       description: this.editForm.get(['description'])!.value,
       thumbnailContentType: this.editForm.get(['thumbnailContentType'])!.value,
       thumbnail: this.editForm.get(['thumbnail'])!.value,

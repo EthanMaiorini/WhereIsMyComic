@@ -30,8 +30,8 @@ import whereismycomic.repository.ComicRepository;
 @WithMockUser
 class ComicResourceIT {
 
-    private static final Integer DEFAULT_ISSUE_NUMBER = 1;
-    private static final Integer UPDATED_ISSUE_NUMBER = 2;
+    private static final Integer DEFAULT_ISSUENUMBER = 1;
+    private static final Integer UPDATED_ISSUENUMBER = 2;
 
     private static final String DEFAULT_LOCATION = "AAAAAAAAAA";
     private static final String UPDATED_LOCATION = "BBBBBBBBBB";
@@ -72,7 +72,7 @@ class ComicResourceIT {
      */
     public static Comic createEntity(EntityManager em) {
         Comic comic = new Comic()
-            .issueNumber(DEFAULT_ISSUE_NUMBER)
+            .issuenumber(DEFAULT_ISSUENUMBER)
             .location(DEFAULT_LOCATION)
             .title(DEFAULT_TITLE)
             .description(DEFAULT_DESCRIPTION)
@@ -89,7 +89,7 @@ class ComicResourceIT {
      */
     public static Comic createUpdatedEntity(EntityManager em) {
         Comic comic = new Comic()
-            .issueNumber(UPDATED_ISSUE_NUMBER)
+            .issuenumber(UPDATED_ISSUENUMBER)
             .location(UPDATED_LOCATION)
             .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
@@ -116,7 +116,7 @@ class ComicResourceIT {
         List<Comic> comicList = comicRepository.findAll();
         assertThat(comicList).hasSize(databaseSizeBeforeCreate + 1);
         Comic testComic = comicList.get(comicList.size() - 1);
-        assertThat(testComic.getIssueNumber()).isEqualTo(DEFAULT_ISSUE_NUMBER);
+        assertThat(testComic.getIssuenumber()).isEqualTo(DEFAULT_ISSUENUMBER);
         assertThat(testComic.getLocation()).isEqualTo(DEFAULT_LOCATION);
         assertThat(testComic.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testComic.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
@@ -154,7 +154,7 @@ class ComicResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(comic.getId().intValue())))
-            .andExpect(jsonPath("$.[*].issueNumber").value(hasItem(DEFAULT_ISSUE_NUMBER)))
+            .andExpect(jsonPath("$.[*].issuenumber").value(hasItem(DEFAULT_ISSUENUMBER)))
             .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION)))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
@@ -174,7 +174,7 @@ class ComicResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(comic.getId().intValue()))
-            .andExpect(jsonPath("$.issueNumber").value(DEFAULT_ISSUE_NUMBER))
+            .andExpect(jsonPath("$.issuenumber").value(DEFAULT_ISSUENUMBER))
             .andExpect(jsonPath("$.location").value(DEFAULT_LOCATION))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
@@ -202,7 +202,7 @@ class ComicResourceIT {
         // Disconnect from session so that the updates on updatedComic are not directly saved in db
         em.detach(updatedComic);
         updatedComic
-            .issueNumber(UPDATED_ISSUE_NUMBER)
+            .issuenumber(UPDATED_ISSUENUMBER)
             .location(UPDATED_LOCATION)
             .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
@@ -221,7 +221,7 @@ class ComicResourceIT {
         List<Comic> comicList = comicRepository.findAll();
         assertThat(comicList).hasSize(databaseSizeBeforeUpdate);
         Comic testComic = comicList.get(comicList.size() - 1);
-        assertThat(testComic.getIssueNumber()).isEqualTo(UPDATED_ISSUE_NUMBER);
+        assertThat(testComic.getIssuenumber()).isEqualTo(UPDATED_ISSUENUMBER);
         assertThat(testComic.getLocation()).isEqualTo(UPDATED_LOCATION);
         assertThat(testComic.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testComic.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
@@ -311,7 +311,7 @@ class ComicResourceIT {
         List<Comic> comicList = comicRepository.findAll();
         assertThat(comicList).hasSize(databaseSizeBeforeUpdate);
         Comic testComic = comicList.get(comicList.size() - 1);
-        assertThat(testComic.getIssueNumber()).isEqualTo(DEFAULT_ISSUE_NUMBER);
+        assertThat(testComic.getIssuenumber()).isEqualTo(DEFAULT_ISSUENUMBER);
         assertThat(testComic.getLocation()).isEqualTo(DEFAULT_LOCATION);
         assertThat(testComic.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testComic.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
@@ -332,7 +332,7 @@ class ComicResourceIT {
         partialUpdatedComic.setId(comic.getId());
 
         partialUpdatedComic
-            .issueNumber(UPDATED_ISSUE_NUMBER)
+            .issuenumber(UPDATED_ISSUENUMBER)
             .location(UPDATED_LOCATION)
             .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
@@ -351,7 +351,7 @@ class ComicResourceIT {
         List<Comic> comicList = comicRepository.findAll();
         assertThat(comicList).hasSize(databaseSizeBeforeUpdate);
         Comic testComic = comicList.get(comicList.size() - 1);
-        assertThat(testComic.getIssueNumber()).isEqualTo(UPDATED_ISSUE_NUMBER);
+        assertThat(testComic.getIssuenumber()).isEqualTo(UPDATED_ISSUENUMBER);
         assertThat(testComic.getLocation()).isEqualTo(UPDATED_LOCATION);
         assertThat(testComic.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testComic.getDescription()).isEqualTo(UPDATED_DESCRIPTION);

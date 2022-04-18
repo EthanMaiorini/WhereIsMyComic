@@ -29,11 +29,11 @@ public class Series implements Serializable {
 
     @OneToMany(mappedBy = "series")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "series", "characters" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "series" }, allowSetters = true)
     private Set<Comic> comics = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "series", "comics" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "series" }, allowSetters = true)
     private Characters characters;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

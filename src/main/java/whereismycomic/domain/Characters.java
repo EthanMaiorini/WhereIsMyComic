@@ -24,8 +24,8 @@ public class Characters implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "full_name")
-    private String fullName;
+    @Column(name = "fullname")
+    private String fullname;
 
     @Column(name = "description")
     private String description;
@@ -42,11 +42,6 @@ public class Characters implements Serializable {
     @JsonIgnoreProperties(value = { "comics", "characters" }, allowSetters = true)
     private Set<Series> series = new HashSet<>();
 
-    @OneToMany(mappedBy = "characters")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "series", "characters" }, allowSetters = true)
-    private Set<Comic> comics = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -62,17 +57,17 @@ public class Characters implements Serializable {
         this.id = id;
     }
 
-    public String getFullName() {
-        return this.fullName;
+    public String getFullname() {
+        return this.fullname;
     }
 
-    public Characters fullName(String fullName) {
-        this.setFullName(fullName);
+    public Characters fullname(String fullname) {
+        this.setFullname(fullname);
         return this;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getDescription() {
@@ -145,37 +140,6 @@ public class Characters implements Serializable {
         return this;
     }
 
-    public Set<Comic> getComics() {
-        return this.comics;
-    }
-
-    public void setComics(Set<Comic> comics) {
-        if (this.comics != null) {
-            this.comics.forEach(i -> i.setCharacters(null));
-        }
-        if (comics != null) {
-            comics.forEach(i -> i.setCharacters(this));
-        }
-        this.comics = comics;
-    }
-
-    public Characters comics(Set<Comic> comics) {
-        this.setComics(comics);
-        return this;
-    }
-
-    public Characters addComic(Comic comic) {
-        this.comics.add(comic);
-        comic.setCharacters(this);
-        return this;
-    }
-
-    public Characters removeComic(Comic comic) {
-        this.comics.remove(comic);
-        comic.setCharacters(null);
-        return this;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -200,7 +164,7 @@ public class Characters implements Serializable {
     public String toString() {
         return "Characters{" +
             "id=" + getId() +
-            ", fullName='" + getFullName() + "'" +
+            ", fullname='" + getFullname() + "'" +
             ", description='" + getDescription() + "'" +
             ", thumbnail='" + getThumbnail() + "'" +
             ", thumbnailContentType='" + getThumbnailContentType() + "'" +
