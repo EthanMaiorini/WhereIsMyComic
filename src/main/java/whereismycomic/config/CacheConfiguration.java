@@ -54,6 +54,8 @@ public class CacheConfiguration {
             createCache(cm, whereismycomic.domain.Series.class.getName());
             createCache(cm, whereismycomic.domain.Series.class.getName() + ".comics");
             createCache(cm, whereismycomic.domain.Comic.class.getName());
+            createCache(cm, whereismycomic.domain.Characters.class.getName() + ".ids");
+            createCache(cm, whereismycomic.domain.Series.class.getName() + ".ids");
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -1,0 +1,91 @@
+<div>
+  <h2 id="page-heading" data-cy="CharactersHeading">
+    <span>Characters</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-characters"
+        [routerLink]="['/characters/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span> Create a new Characters </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="characters?.length === 0">
+    <span>No characters found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="characters && characters.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span>ID</span></th>
+          <th scope="col"><span>Full Name</span></th>
+          <th scope="col"><span>Description</span></th>
+          <th scope="col"><span>Thumbnail</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let characters of characters; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/characters', characters.id, 'view']">{{ characters.id }}</a>
+          </td>
+          <td>{{ characters.fullName }}</td>
+          <td>{{ characters.description }}</td>
+          <td>
+            <a *ngIf="characters.thumbnail" (click)="openFile(characters.thumbnail, characters.thumbnailContentType)">
+              <img
+                [src]="'data:' + characters.thumbnailContentType + ';base64,' + characters.thumbnail"
+                style="max-height: 30px"
+                alt="characters image"
+              />
+            </a>
+            <span *ngIf="characters.thumbnail">{{ characters.thumbnailContentType }}, {{ byteSize(characters.thumbnail) }}</span>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/characters', characters.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/characters', characters.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(characters)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

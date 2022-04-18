@@ -1,0 +1,50 @@
+{
+  "applications": "*",
+  "changelogDate": "20220418002547",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "comic",
+  "fields": [
+    {
+      "fieldName": "issueNumber",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "location",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "thumbnail",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Comic",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "series",
+      "otherEntityRelationshipName": "comic",
+      "relationshipName": "series",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "characters",
+      "otherEntityRelationshipName": "comic",
+      "relationshipName": "characters",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

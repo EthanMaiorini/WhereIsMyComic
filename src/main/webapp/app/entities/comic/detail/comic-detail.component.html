@@ -1,0 +1,65 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="comic">
+      <h2 data-cy="comicDetailsHeading"><span>Comic</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ comic.id }}</span>
+        </dd>
+        <dt><span>Issue Number</span></dt>
+        <dd>
+          <span>{{ comic.issueNumber }}</span>
+        </dd>
+        <dt><span>Location</span></dt>
+        <dd>
+          <span>{{ comic.location }}</span>
+        </dd>
+        <dt><span>Title</span></dt>
+        <dd>
+          <span>{{ comic.title }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ comic.description }}</span>
+        </dd>
+        <dt><span>Thumbnail</span></dt>
+        <dd>
+          <div *ngIf="comic.thumbnail">
+            <a (click)="openFile(comic.thumbnail, comic.thumbnailContentType)">
+              <img [src]="'data:' + comic.thumbnailContentType + ';base64,' + comic.thumbnail" style="max-width: 100%" alt="comic image" />
+            </a>
+            {{ comic.thumbnailContentType }}, {{ byteSize(comic.thumbnail) }}
+          </div>
+        </dd>
+        <dt><span>Series</span></dt>
+        <dd>
+          <div *ngIf="comic.series">
+            <a [routerLink]="['/series', comic.series?.id, 'view']">{{ comic.series?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Characters</span></dt>
+        <dd>
+          <div *ngIf="comic.characters">
+            <a [routerLink]="['/characters', comic.characters?.id, 'view']">{{ comic.characters?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/comic', comic.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

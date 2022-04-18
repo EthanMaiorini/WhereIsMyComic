@@ -1,0 +1,34 @@
+{
+  "applications": "*",
+  "changelogDate": "20220418002546",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "series",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Series",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "seriesId",
+      "otherEntityName": "comic",
+      "otherEntityRelationshipName": "series",
+      "relationshipName": "comic",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "characters",
+      "otherEntityRelationshipName": "series",
+      "relationshipName": "characters",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

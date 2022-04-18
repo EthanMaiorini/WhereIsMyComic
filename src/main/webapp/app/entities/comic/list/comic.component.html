@@ -1,0 +1,93 @@
+<div>
+  <h2 id="page-heading" data-cy="ComicHeading">
+    <span>Comics</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-comic"
+        [routerLink]="['/comic/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span> Create a new Comic </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="comics?.length === 0">
+    <span>No comics found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="comics && comics.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span>ID</span></th>
+          <th scope="col"><span>Issue Number</span></th>
+          <th scope="col"><span>Location</span></th>
+          <th scope="col"><span>Title</span></th>
+          <th scope="col"><span>Description</span></th>
+          <th scope="col"><span>Thumbnail</span></th>
+          <th scope="col"><span>Series</span></th>
+          <th scope="col"><span>Characters</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let comic of comics; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/comic', comic.id, 'view']">{{ comic.id }}</a>
+          </td>
+          <td>{{ comic.issueNumber }}</td>
+          <td>{{ comic.location }}</td>
+          <td>{{ comic.title }}</td>
+          <td>{{ comic.description }}</td>
+          <td>
+            <a *ngIf="comic.thumbnail" (click)="openFile(comic.thumbnail, comic.thumbnailContentType)">
+              <img [src]="'data:' + comic.thumbnailContentType + ';base64,' + comic.thumbnail" style="max-height: 30px" alt="comic image" />
+            </a>
+            <span *ngIf="comic.thumbnail">{{ comic.thumbnailContentType }}, {{ byteSize(comic.thumbnail) }}</span>
+          </td>
+          <td>
+            <div *ngIf="comic.series">
+              <a [routerLink]="['/series', comic.series?.id, 'view']">{{ comic.series?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="comic.characters">
+              <a [routerLink]="['/characters', comic.characters?.id, 'view']">{{ comic.characters?.id }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/comic', comic.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/comic', comic.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(comic)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
