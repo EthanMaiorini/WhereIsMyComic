@@ -84,10 +84,10 @@
               "browserTarget": "where-is-my-comic:build:production"
             },
             "development": {
-              "browserTarget": "where-is-my-comic:build:development"
+              "browserTarget": "where-is-my-comic:build:"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": ""
         },
         "test": {
           "builder": "@angular-builders/jest:run",
