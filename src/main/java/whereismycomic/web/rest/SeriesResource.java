@@ -174,4 +174,10 @@ public class SeriesResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @GetMapping("/series")
+    public List<Series> getAllSeriesById(@RequestBody Long id) {
+        log.debug("REST request to get all Series by Character Id");
+        return seriesRepository.findSeriesById(id);
+    }
 }

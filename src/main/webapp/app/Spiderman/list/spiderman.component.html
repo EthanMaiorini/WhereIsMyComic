@@ -1,0 +1,55 @@
+<div>
+  <h2 id="page-heading" data-cy="SeriesHeading">
+    <span>Spider-Man</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="series?.length === 0">
+    <span>No series found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="series && series.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span>Name</span></th>
+          <th scope="col"><span>Characters</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let series of series; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/series', series.id, 'view']">{{ series.id }}</a>
+          </td>
+          <td>{{ series.name }}</td>
+          <td>
+            <div *ngIf="series.characters">
+              <a [routerLink]="['/characters', series.characters?.id, 'view']">{{ series.characters?.id }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/series', series.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
