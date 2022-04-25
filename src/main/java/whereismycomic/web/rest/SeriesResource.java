@@ -175,8 +175,8 @@ public class SeriesResource {
             .build();
     }
 
-    @GetMapping("/series")
-    public List<Series> getAllSeriesById(@RequestBody Long id) {
+    @GetMapping("/series/getByCharacter/{id}")
+    public List<Series> getAllSeriesById(@PathVariable Long id) {
         log.debug("REST request to get all Series by Character Id");
         return seriesRepository.findSeriesById(id);
     }

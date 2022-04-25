@@ -18,7 +18,7 @@ export class SpidermanComponent implements OnInit {
   loadAll(): void {
     this.isLoading = true;
 
-    this.seriesService.query().subscribe({
+    this.seriesService.getByCharacter().subscribe({
       next: (res: HttpResponse<ISeries[]>) => {
         this.isLoading = false;
         this.series = res.body ?? [];
