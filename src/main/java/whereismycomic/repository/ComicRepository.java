@@ -9,4 +9,4 @@ import whereismycomic.domain.Comic;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ComicRepository extends JpaRepository<Comic, Long> {}
+public interface ComicRepository extends JpaRepository<Comic, Long>, JpaSpecificationExecutor<Comic> {}

@@ -9,12 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import whereismycomic.domain.Characters;
 import whereismycomic.repository.CharactersRepository;
+import whereismycomic.service.CharactersService;
 import whereismycomic.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -22,7 +22,6 @@ import whereismycomic.web.rest.errors.BadRequestAlertException;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class CharactersResource {
 
     private final Logger log = LoggerFactory.getLogger(CharactersResource.class);
@@ -32,9 +31,12 @@ public class CharactersResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final CharactersService charactersService;
+
     private final CharactersRepository charactersRepository;
 
-    public CharactersResource(CharactersRepository charactersRepository) {
+    public CharactersResource(CharactersService charactersService, CharactersRepository charactersRepository) {
+        this.charactersService = charactersService;
         this.charactersRepository = charactersRepository;
     }
 
@@ -51,7 +53,7 @@ public class CharactersResource {
         if (characters.getId() != null) {
             throw new BadRequestAlertException("A new characters cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Characters result = charactersRepository.save(characters);
+        Characters result = charactersService.save(characters);
         return ResponseEntity
             .created(new URI("/api/characters/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -85,7 +87,7 @@ public class CharactersResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Characters result = charactersRepository.save(characters);
+        Characters result = charactersService.update(characters);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, characters.getId().toString()))
@@ -120,25 +122,7 @@ public class CharactersResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Characters> result = charactersRepository
-            .findById(characters.getId())
-            .map(existingCharacters -> {
-                if (characters.getFullname() != null) {
-                    existingCharacters.setFullname(characters.getFullname());
-                }
-                if (characters.getDescription() != null) {
-                    existingCharacters.setDescription(characters.getDescription());
-                }
-                if (characters.getThumbnail() != null) {
-                    existingCharacters.setThumbnail(characters.getThumbnail());
-                }
-                if (characters.getThumbnailContentType() != null) {
-                    existingCharacters.setThumbnailContentType(characters.getThumbnailContentType());
-                }
-
-                return existingCharacters;
-            })
-            .map(charactersRepository::save);
+        Optional<Characters> result = charactersService.partialUpdate(characters);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -154,7 +138,7 @@ public class CharactersResource {
     @GetMapping("/characters")
     public List<Characters> getAllCharacters() {
         log.debug("REST request to get all Characters");
-        return charactersRepository.findAll();
+        return charactersService.findAll();
     }
 
     /**
@@ -166,7 +150,7 @@ public class CharactersResource {
     @GetMapping("/characters/{id}")
     public ResponseEntity<Characters> getCharacters(@PathVariable Long id) {
         log.debug("REST request to get Characters : {}", id);
-        Optional<Characters> characters = charactersRepository.findById(id);
+        Optional<Characters> characters = charactersService.findOne(id);
         return ResponseUtil.wrapOrNotFound(characters);
     }
 
@@ -179,7 +163,7 @@ public class CharactersResource {
     @DeleteMapping("/characters/{id}")
     public ResponseEntity<Void> deleteCharacters(@PathVariable Long id) {
         log.debug("REST request to delete Characters : {}", id);
-        charactersRepository.deleteById(id);
+        charactersService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

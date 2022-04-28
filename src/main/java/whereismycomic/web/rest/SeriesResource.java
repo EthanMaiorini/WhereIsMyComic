@@ -9,12 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import whereismycomic.domain.Series;
 import whereismycomic.repository.SeriesRepository;
+import whereismycomic.service.SeriesQueryService;
+import whereismycomic.service.SeriesService;
+import whereismycomic.service.criteria.SeriesCriteria;
 import whereismycomic.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -22,7 +24,6 @@ import whereismycomic.web.rest.errors.BadRequestAlertException;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class SeriesResource {
 
     private final Logger log = LoggerFactory.getLogger(SeriesResource.class);
@@ -32,10 +33,16 @@ public class SeriesResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final SeriesService seriesService;
+
     private final SeriesRepository seriesRepository;
 
-    public SeriesResource(SeriesRepository seriesRepository) {
+    private final SeriesQueryService seriesQueryService;
+
+    public SeriesResource(SeriesService seriesService, SeriesRepository seriesRepository, SeriesQueryService seriesQueryService) {
+        this.seriesService = seriesService;
         this.seriesRepository = seriesRepository;
+        this.seriesQueryService = seriesQueryService;
     }
 
     /**
@@ -51,7 +58,7 @@ public class SeriesResource {
         if (series.getId() != null) {
             throw new BadRequestAlertException("A new series cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Series result = seriesRepository.save(series);
+        Series result = seriesService.save(series);
         return ResponseEntity
             .created(new URI("/api/series/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -83,7 +90,7 @@ public class SeriesResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Series result = seriesRepository.save(series);
+        Series result = seriesService.update(series);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, series.getId().toString()))
@@ -118,16 +125,7 @@ public class SeriesResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Series> result = seriesRepository
-            .findById(series.getId())
-            .map(existingSeries -> {
-                if (series.getName() != null) {
-                    existingSeries.setName(series.getName());
-                }
-
-                return existingSeries;
-            })
-            .map(seriesRepository::save);
+        Optional<Series> result = seriesService.partialUpdate(series);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -138,12 +136,26 @@ public class SeriesResource {
     /**
      * {@code GET  /series} : get all the series.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of series in body.
      */
     @GetMapping("/series")
-    public List<Series> getAllSeries() {
-        log.debug("REST request to get all Series");
-        return seriesRepository.findAll();
+    public ResponseEntity<List<Series>> getAllSeries(SeriesCriteria criteria) {
+        log.debug("REST request to get Series by criteria: {}", criteria);
+        List<Series> entityList = seriesQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /series/count} : count all the series.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/series/count")
+    public ResponseEntity<Long> countSeries(SeriesCriteria criteria) {
+        log.debug("REST request to count Series by criteria: {}", criteria);
+        return ResponseEntity.ok().body(seriesQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -155,7 +167,7 @@ public class SeriesResource {
     @GetMapping("/series/{id}")
     public ResponseEntity<Series> getSeries(@PathVariable Long id) {
         log.debug("REST request to get Series : {}", id);
-        Optional<Series> series = seriesRepository.findById(id);
+        Optional<Series> series = seriesService.findOne(id);
         return ResponseUtil.wrapOrNotFound(series);
     }
 
@@ -168,16 +180,10 @@ public class SeriesResource {
     @DeleteMapping("/series/{id}")
     public ResponseEntity<Void> deleteSeries(@PathVariable Long id) {
         log.debug("REST request to delete Series : {}", id);
-        seriesRepository.deleteById(id);
+        seriesService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
-    }
-
-    @GetMapping("/series/getByCharacter/{id}")
-    public List<Series> getAllSeriesById(@PathVariable Long id) {
-        log.debug("REST request to get all Series by Character Id");
-        return seriesRepository.findSeriesById(id);
     }
 }

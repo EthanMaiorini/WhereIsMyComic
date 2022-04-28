@@ -21,3 +21,7 @@ relationship OneToMany {
      Characters{series(characterId)} to Series
      Series{comic(seriesId)} to Comic
 }
+
+service all with serviceClass
+
+

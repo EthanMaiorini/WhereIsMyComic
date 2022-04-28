@@ -9,12 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import whereismycomic.domain.Comic;
 import whereismycomic.repository.ComicRepository;
+import whereismycomic.service.ComicQueryService;
+import whereismycomic.service.ComicService;
+import whereismycomic.service.criteria.ComicCriteria;
 import whereismycomic.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -22,7 +24,6 @@ import whereismycomic.web.rest.errors.BadRequestAlertException;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class ComicResource {
 
     private final Logger log = LoggerFactory.getLogger(ComicResource.class);
@@ -32,10 +33,16 @@ public class ComicResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final ComicService comicService;
+
     private final ComicRepository comicRepository;
 
-    public ComicResource(ComicRepository comicRepository) {
+    private final ComicQueryService comicQueryService;
+
+    public ComicResource(ComicService comicService, ComicRepository comicRepository, ComicQueryService comicQueryService) {
+        this.comicService = comicService;
         this.comicRepository = comicRepository;
+        this.comicQueryService = comicQueryService;
     }
 
     /**
@@ -51,7 +58,7 @@ public class ComicResource {
         if (comic.getId() != null) {
             throw new BadRequestAlertException("A new comic cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Comic result = comicRepository.save(comic);
+        Comic result = comicService.save(comic);
         return ResponseEntity
             .created(new URI("/api/comics/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -83,7 +90,7 @@ public class ComicResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Comic result = comicRepository.save(comic);
+        Comic result = comicService.update(comic);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, comic.getId().toString()))
@@ -116,31 +123,7 @@ public class ComicResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Comic> result = comicRepository
-            .findById(comic.getId())
-            .map(existingComic -> {
-                if (comic.getIssuenumber() != null) {
-                    existingComic.setIssuenumber(comic.getIssuenumber());
-                }
-                if (comic.getLocation() != null) {
-                    existingComic.setLocation(comic.getLocation());
-                }
-                if (comic.getTitle() != null) {
-                    existingComic.setTitle(comic.getTitle());
-                }
-                if (comic.getDescription() != null) {
-                    existingComic.setDescription(comic.getDescription());
-                }
-                if (comic.getThumbnail() != null) {
-                    existingComic.setThumbnail(comic.getThumbnail());
-                }
-                if (comic.getThumbnailContentType() != null) {
-                    existingComic.setThumbnailContentType(comic.getThumbnailContentType());
-                }
-
-                return existingComic;
-            })
-            .map(comicRepository::save);
+        Optional<Comic> result = comicService.partialUpdate(comic);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -151,12 +134,26 @@ public class ComicResource {
     /**
      * {@code GET  /comics} : get all the comics.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of comics in body.
      */
     @GetMapping("/comics")
-    public List<Comic> getAllComics() {
-        log.debug("REST request to get all Comics");
-        return comicRepository.findAll();
+    public ResponseEntity<List<Comic>> getAllComics(ComicCriteria criteria) {
+        log.debug("REST request to get Comics by criteria: {}", criteria);
+        List<Comic> entityList = comicQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /comics/count} : count all the comics.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/comics/count")
+    public ResponseEntity<Long> countComics(ComicCriteria criteria) {
+        log.debug("REST request to count Comics by criteria: {}", criteria);
+        return ResponseEntity.ok().body(comicQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -168,7 +165,7 @@ public class ComicResource {
     @GetMapping("/comics/{id}")
     public ResponseEntity<Comic> getComic(@PathVariable Long id) {
         log.debug("REST request to get Comic : {}", id);
-        Optional<Comic> comic = comicRepository.findById(id);
+        Optional<Comic> comic = comicService.findOne(id);
         return ResponseUtil.wrapOrNotFound(comic);
     }
 
@@ -181,7 +178,7 @@ public class ComicResource {
     @DeleteMapping("/comics/{id}")
     public ResponseEntity<Void> deleteComic(@PathVariable Long id) {
         log.debug("REST request to delete Comic : {}", id);
-        comicRepository.deleteById(id);
+        comicService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

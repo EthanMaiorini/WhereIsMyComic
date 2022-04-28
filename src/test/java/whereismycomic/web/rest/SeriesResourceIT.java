@@ -18,8 +18,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import whereismycomic.IntegrationTest;
+import whereismycomic.domain.Characters;
+import whereismycomic.domain.Comic;
 import whereismycomic.domain.Series;
 import whereismycomic.repository.SeriesRepository;
+import whereismycomic.service.criteria.SeriesCriteria;
 
 /**
  * Integration tests for the {@link SeriesResource} REST controller.
@@ -138,6 +141,192 @@ class SeriesResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(series.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
+    }
+
+    @Test
+    @Transactional
+    void getSeriesByIdFiltering() throws Exception {
+        // Initialize the database
+        seriesRepository.saveAndFlush(series);
+
+        Long id = series.getId();
+
+        defaultSeriesShouldBeFound("id.equals=" + id);
+        defaultSeriesShouldNotBeFound("id.notEquals=" + id);
+
+        defaultSeriesShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultSeriesShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultSeriesShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultSeriesShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllSeriesByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        seriesRepository.saveAndFlush(series);
+
+        // Get all the seriesList where name equals to DEFAULT_NAME
+        defaultSeriesShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the seriesList where name equals to UPDATED_NAME
+        defaultSeriesShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSeriesByNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        seriesRepository.saveAndFlush(series);
+
+        // Get all the seriesList where name not equals to DEFAULT_NAME
+        defaultSeriesShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
+
+        // Get all the seriesList where name not equals to UPDATED_NAME
+        defaultSeriesShouldBeFound("name.notEquals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSeriesByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        seriesRepository.saveAndFlush(series);
+
+        // Get all the seriesList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultSeriesShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the seriesList where name equals to UPDATED_NAME
+        defaultSeriesShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSeriesByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        seriesRepository.saveAndFlush(series);
+
+        // Get all the seriesList where name is not null
+        defaultSeriesShouldBeFound("name.specified=true");
+
+        // Get all the seriesList where name is null
+        defaultSeriesShouldNotBeFound("name.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllSeriesByNameContainsSomething() throws Exception {
+        // Initialize the database
+        seriesRepository.saveAndFlush(series);
+
+        // Get all the seriesList where name contains DEFAULT_NAME
+        defaultSeriesShouldBeFound("name.contains=" + DEFAULT_NAME);
+
+        // Get all the seriesList where name contains UPDATED_NAME
+        defaultSeriesShouldNotBeFound("name.contains=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSeriesByNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        seriesRepository.saveAndFlush(series);
+
+        // Get all the seriesList where name does not contain DEFAULT_NAME
+        defaultSeriesShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
+
+        // Get all the seriesList where name does not contain UPDATED_NAME
+        defaultSeriesShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllSeriesByComicIsEqualToSomething() throws Exception {
+        // Initialize the database
+        seriesRepository.saveAndFlush(series);
+        Comic comic;
+        if (TestUtil.findAll(em, Comic.class).isEmpty()) {
+            comic = ComicResourceIT.createEntity(em);
+            em.persist(comic);
+            em.flush();
+        } else {
+            comic = TestUtil.findAll(em, Comic.class).get(0);
+        }
+        em.persist(comic);
+        em.flush();
+        series.addComic(comic);
+        seriesRepository.saveAndFlush(series);
+        Long comicId = comic.getId();
+
+        // Get all the seriesList where comic equals to comicId
+        defaultSeriesShouldBeFound("comicId.equals=" + comicId);
+
+        // Get all the seriesList where comic equals to (comicId + 1)
+        defaultSeriesShouldNotBeFound("comicId.equals=" + (comicId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllSeriesByCharactersIsEqualToSomething() throws Exception {
+        // Initialize the database
+        seriesRepository.saveAndFlush(series);
+        Characters characters;
+        if (TestUtil.findAll(em, Characters.class).isEmpty()) {
+            characters = CharactersResourceIT.createEntity(em);
+            em.persist(characters);
+            em.flush();
+        } else {
+            characters = TestUtil.findAll(em, Characters.class).get(0);
+        }
+        em.persist(characters);
+        em.flush();
+        series.setCharacters(characters);
+        seriesRepository.saveAndFlush(series);
+        Long charactersId = characters.getId();
+
+        // Get all the seriesList where characters equals to charactersId
+        defaultSeriesShouldBeFound("charactersId.equals=" + charactersId);
+
+        // Get all the seriesList where characters equals to (charactersId + 1)
+        defaultSeriesShouldNotBeFound("charactersId.equals=" + (charactersId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultSeriesShouldBeFound(String filter) throws Exception {
+        restSeriesMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(series.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+
+        // Check, that the count call also returns 1
+        restSeriesMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultSeriesShouldNotBeFound(String filter) throws Exception {
+        restSeriesMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restSeriesMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
     }
 
     @Test

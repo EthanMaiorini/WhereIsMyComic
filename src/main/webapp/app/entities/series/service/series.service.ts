@@ -41,11 +41,6 @@ export class SeriesService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  getByCharacter(id:number):Observable<EntityArrayResponseType> {
-                                const options = createRequestOption(req);
-                                return this.http.get<ISeries[]>(`${this.resourceUrl}/getByCharacter/${id}`, { observe: 'response' });
-                              }
-
   addSeriesToCollectionIfMissing(seriesCollection: ISeries[], ...seriesToCheck: (ISeries | null | undefined)[]): ISeries[] {
     const series: ISeries[] = seriesToCheck.filter(isPresent);
     if (series.length > 0) {
