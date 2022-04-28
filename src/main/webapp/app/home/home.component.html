@@ -13,8 +13,8 @@
   </div>
 
     <div [ngSwitch]="account !== null">
-      <div class="alert alert-success" *ngSwitchCase="true">
-        <span id="home-logged-message" *ngIf="account">You are logged in as user "{{ account.login }}".</span>
+<!--      <div class="alert alert-success" *ngSwitchCase="true">-->
+<!--        <span id="home-logged-message" *ngIf="account">You are logged in as user "{{ account.login }}".</span>-->
 <!--        <div class="dropdown">-->
 <!--          <div class="dropdown-content">-->
 <!--            <a routerLink="series/character_id =1001">Spider-Man</a>-->
@@ -22,7 +22,7 @@
 <!--            <a href="Iron Man">Iron Man</a>-->
 <!--          </div>-->
 <!--        </div>-->
-        <div> Select a Character
+        <div class="d-flex justify-content-center"> Select a Character
       <select class="dropdown" >
         <option *ngFor="let character of characters"> {{character.fullname}}
         </option>
@@ -34,8 +34,7 @@
         <a class="alert-link" (click)="login()">sign in</a
         ><span
           >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
-          password="user").</span
-        >
+          password="user").</span>
       </div>
 
       <div class="alert alert-warning" *ngSwitchCase="false">
